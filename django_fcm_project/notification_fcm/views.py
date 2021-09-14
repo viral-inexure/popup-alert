@@ -39,7 +39,7 @@ def index(request):
 #     return render(request, 'notification_fcm/index.html')
 
 
-cred = credentials.Certificate("/home/viral/pycharm/projects/django-fcm_practice/django_fcm_project/serviceAccount.json")
+cred = credentials.Certificate("../django_fcm_project/serviceAccount.json")
 firebase_admin.initialize_app(cred)
 uid = 'some-uid'
 custom_token = auth.create_custom_token(uid)
