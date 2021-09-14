@@ -13,7 +13,7 @@ SECRET_KEY = 'django-insecure-r-#9-0s_&)y%tanqrkgi=hs#t6!y(0*71rw^&^eu*qpggnun_y
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['https://alert-popup.herokuapp.com/', 'localhost:8000', '127.0.0.1:8000', 'alert-popup.herokuapp.com']
 
 # Application definition
 
