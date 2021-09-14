@@ -34,7 +34,7 @@ FCM_APIKEY = 'AIzaSyAQBLbFSr_UkcYd0xmEi-K08Eoe9E-4FXY'
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = \
     '/home/viral/pycharm/projects/demo_project/demo_project/serviceAccount.json'
 
-GOOGLE_APPLICATION_CREDENTIALS = '/home/viral/pycharm/projects/django-fcm_practice/django_fcm_project/serviceAccount.json'
+GOOGLE_APPLICATION_CREDENTIALS = '../django_fcm_project/serviceAccount.json'
 FCM_DJANGO_SETTINGS = {
 
     # default: _('FCM Django')
