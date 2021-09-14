@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <title>Hello, world!</title>
+</head>
+<body>
+<div class="container">
+    <h1 class="offset-5 my-5">Hello, world!</h1>
+
+    <ul class="list-group my-4">
+        <li class="list-group-item active">Cras justo odio</li>
+        <li class="list-group-item">Dapibus ac facilisis in</li>
+        <li class="list-group-item">Morbi leo risus</li>
+        <li class="list-group-item">Porta ac consectetur ac</li>
+        <li class="list-group-item">Vestibulum at eros</li>
+    </ul>
+</div>
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+<script src="https://www.gstatic.com/firebasejs/7.18.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.18.0/firebase-messaging.js"></script>
+<script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.0.2/firebase-app.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
+
+  // Your web app's Firebase configuration
+  const firebaseConfig = {
+    apiKey: "AIzaSyAQBLbFSr_UkcYd0xmEi-K08Eoe9E-4FXY",
+    authDomain: "popup-alert.firebaseapp.com",
+    projectId: "popup-alert",
+    storageBucket: "popup-alert.appspot.com",
+    messagingSenderId: "473956313712",
+    appId: "1:473956313712:web:0524c8b00670eb69c2a2b5"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const messaging=firebase.messaging();
+
+ //Custom function made to run firebase service
+ getStartToken();
+ //This code recieve message from server /your app and print message to console if same tab is opened as of project
+ in browser
+ messaging.onMessage(function(payload){
+ console.log("on Message",payload);
+ });
+
+ function getStartToken(){
+messaging.getToken().then((currentToken) => {
+if (currentToken) {
+sendTokenToServer(currentToken);
+}
+else {
+// Show permission request.
+RequestPermission();
+setTokenSentToServer(false);
+}
+}).catch((err) => {
+setTokenSentToServer(false);
+});
+}
+function RequestPermission(){
+messaging.requestPermission()
+.then(function(permission){
+if (permission === 'granted') {
+console.log("have Permission");
+//calls method again and to sent token to server
+getStartToken();
+ }
+ else{console.log("Permission Denied");}
+.catch(function(err){
+console.log(err);
+})
+}
+function sendTokenToServer(token){
+if (!isTokensendTokenToServer()) {
+$.ajax({
+url: https://fcm.googleapis.com/fcm/send,
+type: 'POST',
+data: {
+//whatever you wanna send
+push_token:token,
+{"registration_ids":{token},
+"data":{ "title":"demo","body":this is demo data","clickUrl":"https://google.com"}}
+},
+success: function (response) {
+setTokenSentToServer(true);
+},
+error: function (err) {
+setTokenSentToServer(false);
+},
+});
+}}
+function isTokensendTokenToServer() {
+return window.localStorage.getItem('sendTokenToServer') === '1';
+}
+function setTokenSentToServer(sent) {
+window.localStorage.setItem('sendTokenToServer', sent ? '1' : '0');
+}
+
+
+</script>
+</body>
+</html>
