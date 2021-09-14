@@ -19,12 +19,16 @@ google-crc32c==1.1.2
 google-resumable-media==2.0.2
 googleapis-common-protos==1.53.0
 grpcio==1.40.0
+gunicorn==20.1.0
 httplib2==0.19.1
 idna==3.2
+insultgenerator==1.0.3
+loremipsum==1.0.5
 msgpack==1.0.2
 packaging==21.0
 proto-plus==1.19.0
 protobuf==3.17.3
+psycopg2-binary==2.9.1
 pyasn1==0.4.8
 pyasn1-modules==0.2.8
 pycparser==2.20
@@ -37,3 +41,5 @@ sqlparse==0.4.2
 typing-extensions==3.10.0.2
 uritemplate==3.0.1
 urllib3==1.26.6
+White-Noise==0.1.0
+whitenoise==5.3.0
