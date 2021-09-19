@@ -1,47 +1,50 @@
-# from django.shortcuts import render
-# from firebase_admin.messaging import Message, Notification
-# from fcm_django.models import FCMDevice
 import firebase_admin
 from django.contrib.auth.models import User
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.views.generic import CreateView
-from firebase_admin import credentials, auth
-from .form import RegisterUserForm
+from django.contrib.auth.views import LoginView
 
-# Create your views here.
+from fcm_django.models import FCMDevice
+from firebase_admin import auth, credentials
+from firebase_admin.messaging import Message, Notification
+from .form import RegisterUserForm, Login_Form
 
 
 class RegisterPage(CreateView):
     model = User
-    template_name = 'demo_app/register.html'
+    template_name = 'notification_fcm/register.html'
     form_class = RegisterUserForm
-    success_url = reverse_lazy('login')
+    success_url = reverse_lazy('index')
 
     def form_valid(self, form):
         form.save()
-        return redirect('login')
+        return redirect('index')
 
+
+class Login(LoginView):
+    model = User
+    template_name = 'notification_fcm/login.html'
+    form_class = Login_Form
+    success_url = reverse_lazy('index')
+
+
+def sign_in(request):
+    return render(request, 'notification_fcm/register.html')
+
+
+def login(request):
+    return render(request, 'notification_fcm/login.html')
 
 
 def index(request):
-    pass
-#     title = 'app is ready'
-#     body = 'notification body......'
-#     cred = credentials.Certificate("/home/viral/pycharm/projects/django-fcm_practice/django_fcm_project/serviceAccount.json")
-#     firebase_admin.initialize_app(cred)
-#     uid = 'some-uid'
-#     custom_token = auth.create_custom_token(uid)
-#     print(custom_token)
-#     device = FCMDevice.objects.all().first()
-#     device.send_message(notification=Notification(title=title, body=body),
-#         topic="Optional topic parameter: Whatever you want")
-#     return render(request, 'notification_fcm/index.html')
+    title = 'app is ready'
+    body = 'notification body......'
+    # device = FCMDevice.objects.all().first()
+    # device.send_message(Message(
+    #     notification=Notification(title=title, body=body),
+    # ))
+
+    return render(request, 'notification_fcm/index.html')
 
 
-cred = credentials.Certificate("../django_fcm_project/serviceAccount.json")
-firebase_admin.initialize_app(cred)
-uid = 'some-uid'
-custom_token = auth.create_custom_token(uid)
-
-print(custom_token)

@@ -1,5 +1,7 @@
 import os
 from pathlib import Path
+import firebase_admin
+from firebase_admin import credentials
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -13,7 +15,12 @@ SECRET_KEY = 'django-insecure-r-#9-0s_&)y%tanqrkgi=hs#t6!y(0*71rw^&^eu*qpggnun_y
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['https://alert-popup.herokuapp.com/', 'localhost:8000', '127.0.0.1:8000', 'alert-popup.herokuapp.com']
+ALLOWED_HOSTS = ['https://alert-popup.herokuapp.com/',
+                 'localhost:8000',
+                 'localhost',
+                 '127.0.0.1:8000',
+                 '127.0.0.1',
+                 'alert-popup.herokuapp.com']
 
 # Application definition
 
@@ -26,27 +33,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'notification_fcm.apps.NotificationFcmConfig',
     "fcm_django",
+    'sslserver',
+    'corsheaders',
+    'rest_framework',
 ]
-
-# FIREBASE_APP = initialize_app()
-FCM_APIKEY = 'AIzaSyAQBLbFSr_UkcYd0xmEi-K08Eoe9E-4FXY'
-#
-os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = \
-    '/home/viral/pycharm/projects/demo_project/demo_project/serviceAccount.json'
-
-GOOGLE_APPLICATION_CREDENTIALS = '../django_fcm_project/serviceAccount.json'
-FCM_DJANGO_SETTINGS = {
-
-    # default: _('FCM Django')
-    "APP_VERBOSE_NAME": "notification_fcm",
-    # true if you want to have only one active device per registered user at a time
-    # default: False
-    "ONE_DEVICE_PER_USER": True,
-    # devices to which notifications cannot be sent,
-    # are deleted upon receiving error response from FCM
-    # default: False
-    "DELETE_INACTIVE_DEVICES": False,
-}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -56,7 +46,9 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware'
+    'whitenoise.middleware.WhiteNoiseMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
 ]
 
 ROOT_URLCONF = 'django_fcm_project.urls'
@@ -126,8 +118,32 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
-
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+FCM_DJANGO_SETTINGS = {
+    "FCM_SERVER_KEY": 'AAAAbln_anA:APA91bH6cfW8Ic0VXnOZD5w-3_xtNhrSAHDUwhCEz4dlsY8C_zKDsizkI47Qz8Ic8BiCSQehvLeYIy2JP2Z4oFrmc8qmLJ65e2KPInL6mv0hJ4m7LJpTMlTEVsXOZzvDd7jrcHF48OCJ',
+}
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.SessionAuthentication',
+    ),
+}
+
+PROJECT_APP = os.path.basename(BASE_DIR)
+f = os.path.join(PROJECT_APP, 'local_settings.py')
+if os.path.exists(f):
+    import sys
+    import imp
+    module_name = '%s.local_settings' % PROJECT_APP
+    module = imp.new_module(module_name)
+    module.__file__ = f
+    sys.modules[module_name] = module
+    exec(open(f, 'rb').read())
+
+cred = credentials.Certificate(os.path.join(PROJECT_APP, '../credentials.json'))
+firebase_admin.initialize_app(cred)
